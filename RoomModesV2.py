@@ -1,7 +1,6 @@
 #This program takes the dimensions of the room as
-#and argument, and returns the axial, tangential,
-#and oblique room modes within that given area via
-#graph.
+#an argument, and returns the axial, room modes
+#within that given area via graph.
 
 #Importing nessicary materials
 import matplotlib.pyplot as plt
@@ -10,10 +9,13 @@ import math
 
 
 #Taking user input to determine the area being evaluated,
-#and the units that should be used for evaluation.
+# the units that should be used for evaluation, and the
+#number of room modes to be calculated.
 length=input("Enter the length of the room: ")
 width=input("Enter the width of the room: ")
 height=input("Enter the height of the room: ")
+harmonic=input("Number of harmonics to calculate: ")
+harmonic=int(harmonic)#Value for number of harmonics
 length=float(length) #Value for length as float
 width=float(width) #Value for width as float
 height=float(height) #Value for height as float
@@ -21,11 +23,9 @@ units=input("Is the measurement in feet or meters? (Enter f for feet, and m for 
 
 #Setting up units for speed of sound based off of user input
 if units == "f":
-    v=1125.33 #Feet per second
-    u="Feet" #Units for graph
+    c=1125.33 #Feet per second (speed of sound)
 elif units == "m":
-    v=343 #Meters per second
-    u="Meters" #Units for graph
+    c=343 #Meters per second (speed of sound)
 else:    #If f or m is not entered, user is prompted to resubmit either m or f
     print("Please enter either m or f to indicate units.")
     units=input("Is the measurement in feet or meters? (Enter f for feet, and m for meters): ")
@@ -33,20 +33,17 @@ else:    #If f or m is not entered, user is prompted to resubmit either m or f
 
 
 #This section calculates the axial room modes (between paralell walls)
-axialN = range(1,41) #Sets the number of harmonics to be calculated (x axis)
+axialN = range(1,harmonic+1) #Sets the number of harmonics to be calculated (x axis)
 axialL = [] #List of room modes created as a result of room length
 axialW = [] #List of room modes created as a result of room width
 axialH = [] #List of room modes created as a result of room height
-axialAll = [] #List of all axial modes
-v = v/2
+axialAll = [] #List of all axial modes (for histogram)
+v = c/2 #Adjusting speed of sound for equation
 
-for i in range(1,41):
-    axialL.append(v*math.sqrt(length**2/i**2)) #Calculating and appending room modes to list axialL
-    axialW.append(v*math.sqrt(width**2/i**2)) #Calculating and appending room modes to list axialW
-    axialH.append(v*math.sqrt(height**2/i**2)) #Calculating and appending room modes to list axialH
-axialL.reverse() #Reversing lists to allign frequencies with correct harmonic numbers.
-axialW.reverse()
-axialH.reverse()
+for i in range(1,harmonic+1):
+    axialL.append(v*math.sqrt(i**2/length**2)) #Calculating and appending room modes to list axialL
+    axialW.append(v*math.sqrt(i**2/width**2)) #Calculating and appending room modes to list axialW
+    axialH.append(v*math.sqrt(i**2/height**2)) #Calculating and appending room modes to list axialH
 
 #Appending to a list to store all axial modes
 for f in axialL:
@@ -55,7 +52,6 @@ for f in axialW:
     axialAll.append(f)
 for f in axialH:
     axialAll.append(f)
-
 
 
 #Generating scatterplot of axial room modes with frequency vs harmonic number

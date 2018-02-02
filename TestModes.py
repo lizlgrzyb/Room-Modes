@@ -21,10 +21,10 @@ units=input("Is the measurement in feet or meters? (Enter f for feet, and m for 
 
 #Setting up units for speed of sound based off of user input
 if units == "f":
-    v=1125.33 #Feet per second
+    c=1125.33 #Feet per second (speed of sound)
     u="Feet" #Units for graph
 elif units == "m":
-    v=343 #Meters per second
+    c=343 #Meters per second (speed of sound)
     u="Meters" #Units for graph
 else:    #If f or m is not entered, user is prompted to resubmit either m or f
     print("Please enter either m or f to indicate units.")
@@ -38,15 +38,12 @@ axialL = [] #List of room modes created as a result of room length
 axialW = [] #List of room modes created as a result of room width
 axialH = [] #List of room modes created as a result of room height
 axialAll = [] #List of all axial modes
-v = v/2
+v = c/2 #Adjusting speed of sound for equation
 
 for i in range(1,41):
-    axialL.append(v*math.sqrt(length**2/i**2)) #Calculating and appending room modes to list axialL
-    axialW.append(v*math.sqrt(width**2/i**2)) #Calculating and appending room modes to list axialW
-    axialH.append(v*math.sqrt(height**2/i**2)) #Calculating and appending room modes to list axialH
-axialL.reverse() #Reversing lists to allign frequencies with correct harmonic numbers.
-axialW.reverse()
-axialH.reverse()
+    axialL.append(v*math.sqrt(i**2/length**2)) #Calculating and appending room modes to list axialL
+    axialW.append(v*math.sqrt(i**2/width**2)) #Calculating and appending room modes to list axialW
+    axialH.append(v*math.sqrt(i**2/height**2)) #Calculating and appending room modes to list axialH
 
 #Appending to a list to store all axial modes
 for f in axialL:
@@ -55,7 +52,6 @@ for f in axialW:
     axialAll.append(f)
 for f in axialH:
     axialAll.append(f)
-
 
 
 #Generating scatterplot of axial room modes with frequency vs harmonic number
